@@ -557,4 +557,32 @@ BEGIN
     SELECT * FROM @Result;
 END
 
+
+
+SELECT 
+    u.UserID,
+    u.UserName,
+    u.DOB,
+    u.DOJ,
+    u.Balance,
+    u.AccountNo AS User_AccountNo,
+    u.MobileNo,
+    a.AccountID,
+    a.AccountNo AS Account_AccountNo,
+    a.IsSaving,
+    ad.AddressID,
+    ad.AddressDetail,
+    ua.UserAccountMappingID,
+    atx.AccountTransactionID,
+    atx.Amount,
+    atx.IsDebit,
+    atx.Created AS TransactionDate
+FROM 
+    AMS.[User] u
+INNER JOIN AMS.UserAccountMapping ua ON u.UserID = ua.UserID
+INNER JOIN AMS.Account a ON ua.AccountID = a.AccountID
+INNER JOIN AMS.[Address] ad ON u.UserID = ad.UserID
+INNER JOIN AMS.AccountTransaction atx ON a.AccountID = atx.AccountID;
+
+
   
