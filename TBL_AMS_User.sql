@@ -584,5 +584,55 @@ INNER JOIN AMS.Account a ON ua.AccountID = a.AccountID
 INNER JOIN AMS.[Address] ad ON u.UserID = ad.UserID
 INNER JOIN AMS.AccountTransaction atx ON a.AccountID = atx.AccountID;
 
+CREATE TABLE AMS.accountanapusis (
+    UserID BIGINT,
+    UserName NVARCHAR(250),
+    DOB DATETIME,
+    DOJ DATETIME,
+    Balance DECIMAL(10,6),
+    User_AccountNo INT,
+    MobileNo INT,
+    AccountID BIGINT,
+    Account_AccountNo INT,
+    IsSaving BIT,
+    AddressID BIGINT,
+    AddressDetail NVARCHAR(MAX),
+    UserAccountMappingID BIGINT,
+    AccountTransactionID BIGINT,
+    Amount DECIMAL(10,6),
+    IsDebit BIT,
+    TransactionDate DATETIME
+);
 
-  
+INSERT INTO AMS.accountanapusis (
+    UserID, UserName, DOB, DOJ, Balance, User_AccountNo, MobileNo,
+    AccountID, Account_AccountNo, IsSaving,
+    AddressID, AddressDetail,
+    UserAccountMappingID,
+    AccountTransactionID, Amount, IsDebit, TransactionDate
+)
+SELECT 
+    u.UserID,
+    u.UserName,
+    u.DOB,
+    u.DOJ,
+    u.Balance,
+    u.AccountNo AS User_AccountNo,
+    u.MobileNo,
+    a.AccountID,
+    a.AccountNo AS Account_AccountNo,
+    a.IsSaving,
+    ad.AddressID,
+    ad.AddressDetail,
+    ua.UserAccountMappingID,
+    atx.AccountTransactionID,
+    atx.Amount,
+    atx.IsDebit,
+    atx.Created AS TransactionDate
+FROM 
+    AMS.[User] u
+INNER JOIN AMS.UserAccountMapping ua ON u.UserID = ua.UserID
+INNER JOIN AMS.Account a ON ua.AccountID = a.AccountID
+INNER JOIN AMS.[Address] ad ON u.UserID = ad.UserID
+INNER JOIN AMS.AccountTransaction atx ON a.AccountID = atx.AccountID;
+
